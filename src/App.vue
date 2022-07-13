@@ -1,21 +1,34 @@
-<script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
+  <canvas id="canvas"/>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<script setup lang="ts">
+import { onMounted } from 'vue';
+
+onMounted(() => {
+  const stage = new createjs.Stage('canvas');
+  const circle = new createjs.Shape();
+  circle.graphics.beginFill('red').drawCircle(0, 0, 40);
+  circle.x = circle.y = 50;
+  stage.addChild(circle);
+  circle.addEventListener('click', handleClick);
+
+  function handleClick(event: any) {
+    console.log(event);
+  }
+
+  createjs.Ticker.addEventListener('tick', handleTick);
+
+  const g = new createjs.Graphics();
+  g.setStrokeStyle(1);
+  g.s('red').f('blue').r(20, 20, 100, 50);
+  stage.addChild(new createjs.Shape(g));
+
+  function handleTick(event: any) {
+    // circle.x += 1;
+    stage.update();
+  }
+
+  stage.update();
+});
+</script>
